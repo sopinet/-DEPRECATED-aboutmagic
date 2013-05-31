@@ -20,7 +20,7 @@ class AboutMagicService
 					"extended" => "true",
 					"client_id" => $ops['about_key']
 			);
-			$ret = $aboutmagichelper->post_to_url($url_data, $data);
+			$ret = $aboutmagichelper->post_to_url($url_data, $data);			
 			$fp = fopen($file, 'w');
 			fwrite($fp, $ret);
 			fclose($fp);
@@ -74,10 +74,10 @@ class AboutMagicService
 			$temp_ok = $this->processProfile($pro, $ops);
 			if ($temp_ok['first_name'] != "") {
 				$profiles_data[$i] = $this->processProfile($pro, $ops);
-				$profiles_data[$i]['avatarOK'] = $this->getAvatar($profiles_data[$i], $ops);
+				$profiles_data[$i]['avatarOK'] = $ops['out_images'] . $this->getAvatar($profiles_data[$i], $ops);
 				$i++;
 			}
-		}
+		}		
 		return $profiles_data;
 	}
 }

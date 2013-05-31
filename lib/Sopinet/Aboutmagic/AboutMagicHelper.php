@@ -1,6 +1,8 @@
 <?php
 namespace Sopinet\Aboutmagic;
 
+use Buzz\Browser;
+
 class AboutMagicHelper
 {
 	public function getArray($file) {
@@ -13,9 +15,9 @@ class AboutMagicHelper
 	}
 	
 	public function post_to_url($url, $data) {
-		$browser = new Buzz\Browser();
-		$response = $browser->post($url, null, $data);
-		return $response;
+		$browser = new Browser(new \Buzz\Client\Curl());
+		$response = $browser->post($url, array(), $data);
+		return $response->getContent();
 	}
 
 	public function saveFileURL($file, $url) {
