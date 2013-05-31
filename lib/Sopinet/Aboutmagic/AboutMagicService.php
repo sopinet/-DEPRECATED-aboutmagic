@@ -13,19 +13,19 @@ class AboutMagicService
 		if (!file_exists($dir)) mkdir($dir);
 		$file = $dir . md5($url_data);
 	
+		$aboutmagichelper = new AboutMagicHelper();		
+		
 		if (!file_exists($file) || (time() - filemtime($file) > ($ops['cache_time']  + rand(0,1000)))) {
 			$data = array(
 					"extended" => "true",
 					"client_id" => $ops['about_key']
 			);
-	
-			$aboutmagichelper = new AboutMagicHelper();
 			$ret = $aboutmagichelper->post_to_url($url_data, $data);
 			$fp = fopen($file, 'w');
 			fwrite($fp, $ret);
 			fclose($fp);
 		}
-		return $this->getArray($file);
+		return $aboutmagichelper->getArray($file);
 	}
 	
 	function proccessIMG($url, $ops) {

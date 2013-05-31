@@ -8,7 +8,8 @@ class AboutMagicHelper
 	}	
 	
 	public function getFile($file) {
-		
+		$string = file_get_contents($file);
+		return $string;
 	}
 	
 	public function post_to_url($url, $data) {
