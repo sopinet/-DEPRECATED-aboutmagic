@@ -51,7 +51,18 @@ class AboutMagicService
 			// solarize: $command_thumb = "convert -define jpeg:size=300x300 ".$file." -thumbnail 300x220^ -solarize 55 -gravity center -extent 300x220 ".$file_efx;
 			*
 			*/
-			$command_thumb = "convert -define jpeg:size=600x600 ".$file." -thumbnail 600x400^ -colorspace gray -gravity center -extent 600x400 ".$file_efx;
+			switch ($ops['fx']) {
+				case 'sepia':
+					$command_thumb = "convert -define jpeg:size=300x300 ".$file." -monochrome -thumbnail 600x400^ -sepia-tone 80% -gravity center -extent 600x400 ".$file_efx;
+				break;
+				case 'gray':
+					$command_thumb = "convert -define jpeg:size=600x600 ".$file." -thumbnail 600x400^ -colorspace gray -gravity center -extent 600x400 ".$file_efx;
+				break;
+				default:
+					$command_thumb = "convert -define jpeg:size=600x600 ".$file." -thumbnail 600x400^ -colorspace gray -gravity center -extent 600x400 ".$file_efx;
+				break;
+			}
+			
 			/*echo $command_thumb;
 			 exit();*/
 			exec($command_thumb, $output);
