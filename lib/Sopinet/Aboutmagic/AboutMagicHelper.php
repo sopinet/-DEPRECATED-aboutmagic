@@ -17,11 +17,22 @@ class AboutMagicHelper
 	public function post_to_url($url, $data) {
 		$browser = new Browser(new \Buzz\Client\Curl());
 		$response = $browser->post($url, array(), $data);
-		return $response->getContent();
+
+		// Curl is disable? try it with file_get_contents
+		if ($response->getContent() == "") {
+			$first = true;
+			foreach($data as $key => $value) {
+				if ($first) { $first = false; $url .= '?'; }
+				else $url .= '&';
+				$url .= $key . "=" . $value;
+			}
+			return file_get_contents($url);
+		} else {
+			return $response->getContent();
+		}
 	}
 
 	public function saveFileURL($file, $url) {
-		// TODO: Se puede activar... file_put_contents($file, file_get_contents($url));
 		$ch = curl_init($url);
 		$fp = fopen($file, 'wb');
 		curl_setopt($ch, CURLOPT_FILE, $fp);
@@ -29,5 +40,10 @@ class AboutMagicHelper
 		curl_exec($ch);
 		curl_close($ch);
 		fclose($fp);
+
+		// Curl is disable? try it with file_get_contents
+		if (filesize($file) == 0) {
+			file_put_contents($file, file_get_contents($url));
+		}
 	}	
 }

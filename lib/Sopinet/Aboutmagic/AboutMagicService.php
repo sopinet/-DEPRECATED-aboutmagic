@@ -15,12 +15,19 @@ class AboutMagicService
 	
 		$aboutmagichelper = new AboutMagicHelper();		
 		
-		if (!file_exists($file) || (time() - filemtime($file) > ($ops['cache_time']  + rand(0,1000)))) {
+		if (!file_exists($file) || (filesize($file) == 0) || (time() - filemtime($file) > ($ops['cache_time']  + rand(0,1000)))) {
 			$data = array(
 					"extended" => "true",
 					"client_id" => $ops['about_key']
 			);
-			$ret = $aboutmagichelper->post_to_url($url_data, $data);			
+
+			$ret = $aboutmagichelper->post_to_url($url_data, $data);
+/*
+echo '<pre>';
+print_r($ret);
+echo '</pre>';
+exit();			
+*/
 			$fp = fopen($file, 'w');
 			fwrite($fp, $ret);
 			fclose($fp);
@@ -36,7 +43,7 @@ class AboutMagicService
 		//$dir = $this->container->get('kernel')->getRootDir() . "/../web/profiles/";
 		if (!file_exists($dir)) mkdir($dir);
 		$file = $dir . md5($url) . ".jpg";
-		if (!file_exists($file) || (time() - filemtime($file) > ($ops['cache_time']  + rand(0,1000)))) {
+		if (!file_exists($file) || (filesize($file) == 0) || (time() - filemtime($file) > ($ops['cache_time']  + rand(0,1000)))) {
 			$aboutmagichelper = new AboutMagicHelper();
 			$aboutmagichelper->saveFileURL($file, $url);
 	
